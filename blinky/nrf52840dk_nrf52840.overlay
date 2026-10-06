@@ -1,0 +1,20 @@
+
+/*
+ * Overlay for nrf52840dk_nrf52840
+ *
+ * Demonstrates two types of devicetree overrides:
+ *   1. Alias redirect  — changes WHICH node led0 resolves to
+ *   2. Property override — changes a property ON a specific node
+ */
+
+/ {
+	aliases {
+		led0 = &led1;
+	};
+};
+
+
+&led0 {
+	gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+	label = "Green LED 0 (polarity flipped)";
+};

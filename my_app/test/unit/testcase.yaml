@@ -1,0 +1,11 @@
+tests:
+  periph.unit:
+
+    platform_allow:
+      - native_sim
+      - nrf52840dk/nrf52840
+      - nrf5340dk/nrf5340/cpuapp
+    tags:
+      - periph
+      - haptic
+      - magnetometer

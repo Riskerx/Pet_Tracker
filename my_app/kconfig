@@ -1,0 +1,3 @@
+rsource "lib/periph_drivers/Kconfig"
+
+source "Kconfig.zephyr"

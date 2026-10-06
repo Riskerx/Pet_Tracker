@@ -1,0 +1,11 @@
+
+&i2c0 {
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_FAST>;
+
+    bmi270: bmi270@68 {
+        compatible = "bosch,bmi270";
+        reg = <0x68>;
+        irq-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
+    };
+};

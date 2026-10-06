@@ -1,0 +1,7 @@
+tests:
+  pet_tracker.unit:
+    platform_allow:
+      - native_sim
+    tags:
+      - pet_tracker
+    harness: ztest

@@ -1,0 +1,52 @@
+/*
+ * Repins the nRF52840 DK's I2C0 (TWIM0) to the Tracker_X sensor bus
+ * (P1.08 SDA / P1.09 SCL) and declares the BMI270 IMU that lives on
+ * it at 0x69. This is what makes CONFIG_BMI270=y in prj.conf actually
+ * take effect - without a devicetree node, Kconfig silently drops it
+ * back to 'n'.
+ *
+ * &i2c0 shares its peripheral instance with TWI/SPI/UART on the
+ * nRF52840, and the base board .dts binds it to the plain,
+ * non-DMA "nordic,nrf-twi" by default. zephyr,concat-buf-size is a
+ * TWIM-only (EasyDMA) property, so the compatible override below is
+ * required before that property - or the BMI270 driver, which needs
+ * TWIM - will resolve at all.
+ *
+ * Pin map / address per TrackerX_Firmware_Developer_Guide.md §5.1, §9.4.
+ */
+
+#include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
+
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 1, 8)>,
+                    <NRF_PSEL(TWIM_SCL, 1, 9)>;
+            bias-pull-up;
+        };
+    };
+
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 1, 8)>,
+                    <NRF_PSEL(TWIM_SCL, 1, 9)>;
+            low-power-enable;
+        };
+    };
+};
+
+&i2c0 {
+    compatible = "nordic,nrf-twim";
+    status = "okay";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
+    clock-frequency = <100000>;
+    zephyr,concat-buf-size = <512>;
+
+    bmi270@69 {
+        compatible = "bosch,bmi270";
+        reg = <0x69>;
+        status = "okay";
+    };
+};

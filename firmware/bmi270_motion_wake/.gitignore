@@ -1,0 +1,7 @@
+# Zephyr build output — never commit these
+build/
+*.elf
+*.hex
+*.bin
+*.map
+.west/

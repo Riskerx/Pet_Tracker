@@ -1,0 +1,41 @@
+
+config PERIPH_HAPTIC_DRV2605
+	bool "Build the real DRV2605 haptic backend"
+	select HAPTICS
+	default n
+	help
+	  Compiles src/haptic_drv2605.c, a thin wrapper around Zephyr's
+	  in-tree DRV2605 driver (drivers/haptics/drv2605.c). Enable this
+	  once a DRV2605 is wired up and your devicetree has a node with
+	  "compatible = ti,drv2605;". Until then it will build but every
+	  call returns -ENODEV.
+	  Automatically selects CONFIG_HAPTICS, the Zephyr subsystem the
+	  in-tree driver lives under.
+
+config PERIPH_HAPTIC_USE_REAL
+	bool "Use the real DRV2605 backend as the default"
+	depends on PERIPH_HAPTIC_DRV2605
+	default n
+	help
+	  Flip this the day DRV2605 hardware bring-up is confirmed working.
+	  Application code calling haptic_get_default() does not change.
+
+config PERIPH_MAG_BMM350
+	bool "Build the real BMM350 magnetometer backend"
+	select SENSOR
+	default n
+	help
+	  Compiles src/mag_bmm350.c, a thin wrapper around Zephyr's in-tree
+	  BMM350 sensor driver. Enable once a BMM350 is wired up and your
+	  devicetree has a node with "compatible = bosch,bmm350;".
+	  Automatically selects CONFIG_SENSOR, the Zephyr subsystem the
+	  in-tree driver lives under - this is exactly the dependency the
+	  editor's "must be enabled by CONFIG_SENSOR" warning is pointing at.
+
+config PERIPH_MAG_USE_REAL
+	bool "Use the real BMM350 backend as the default"
+	depends on PERIPH_MAG_BMM350
+	default n
+	help
+	  Flip this the day BMM350 hardware bring-up is confirmed working.
+	  Application code calling mag_get_default() does not change.
